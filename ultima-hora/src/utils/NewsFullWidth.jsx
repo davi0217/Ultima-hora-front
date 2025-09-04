@@ -1,6 +1,8 @@
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect, useRef, useContext} from 'react'
+import {NewsContext} from '../App.jsx'
 
 import dummy from "../assets/news_img/dummy.jpg"
+import { ColumnCTA } from './ColumnCTA'
 
 export function NewsFullWidth(){
 
@@ -15,28 +17,34 @@ export function NewsFullWidth(){
             }
         ]
     })
+
+    const {useNewsFullWidth}=useContext(NewsContext)
+    const {news}=useNewsFullWidth()
+      
+
+    
         
         
-        return <article className='bg-stone-100 h-200 p-5 grid grid-cols-9 gap-3 w-full overflow-hidden '>
+        return  <>
+        <article className='bg-stone-100 h-200 p-5 grid grid-cols-9 gap-3 w-full overflow-hidden '>
 
             <div className='col-span-4 p-1  w-full flex flex-wrap gap-1'>
 
                 <div className='h-7/10 w-full  overflow-hidden'>
 
-                <h1 className='h-auto w-full  text-4xl font-extrabold mb-5  tracking-wide'> <span><i class="fa-regular fa-newspaper text-red-800"></i></span>  Such wonderful news to be reading at this time...</h1>
-                <img className='w-400 h-70 object-cover mb-5' src={dummy} alt="" />
-                <h2 className='h-auto w-full  font-normal text-sm  '>This is such an interes"This is such an interesting news and you will love to read it. ove to read it. Give it a chance, come onchance, come onting news and you will love to read it. Give it a chance, come on, "This is such an interesting news and you will love to read it. Give it a chance, come on, </h2>
+                <h1 className='h-auto w-full  text-4xl font-extrabold mb-5  tracking-wide'> <span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{news?.cover[0]?.title}</h1>
+                <img className='w-400 h-70 object-cover mb-5' src={`http://localhost:3000${news?.cover[0]?.image}`} alt="" />
+                <h2 className='h-auto w-full  font-normal text-sm break-all   '>{news?.cover[0]?.content.slice(0,200)} </h2>
                 
                 
                 </div>
                 <div className='h-3/10 w-full  grid grid-cols-2 gap-5 '>
 
                 <div className='col-span-1 h-full  overflow-hidden'>
-                                    <h2 className=' w-full text-stone-700  font-bold text-sm  '> <span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;This is such an interes"This is such an interesting news and you will love to read it. ove to read it. Give it a chance, come onchance, come onting news and you will love to read it. Give it a chance, come on, "This is such an interesting news and you will love to read it. Give it a chance, come on, </h2>
-
+                                    <h2 className=' w-full text-stone-700  font-bold text-sm break-all   '> <span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{news?.cover[1]?.content.slice(0,200)} </h2>
                 </div>
                 <div className='col-span-1 h-full  overflow-hidden'>
-                                    <h2 className=' w-full text-stone-700  font-bold text-sm  '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;This is such an interes"This is such an interesting news and you will love to read it. ove to read it. Give it a chance, come onchance, come onting news and you will love to read it. Give it a chance, come on, "This is such an interesting news and you will love to read it. Give it a chance, come on, </h2>
+                                    <h2 className=' w-full text-stone-700  font-bold text-sm break-all  '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{news?.cover[2]?.content.slice(0,200)} </h2>
 
                 </div>
                 
@@ -45,46 +53,188 @@ export function NewsFullWidth(){
 
 
             </div>
-            <div className='col-span-2  flex flex-wrap divide-y-2 divide-stone-400'>
-                    <div className='h-1/2 w-full p-2  py-4  overflow-hidden'>
+            <div className='col-span-2 h-200 flex flex-wrap divide-y-2 divide-stone-400'>
+                    <div className='h-100 w-full p-2  py-4  overflow-hidden'>
 
-                    <img className='object-cover h-1/3 w-300 mb-5' src={dummy} alt="" />
-                    <h1 className='font-extrabold text-2xl tracking-wide '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;What a wonderful news to be reading right???</h1>
+                    <img className='object-cover h-1/3 w-300 mb-5' src={`http://localhost:3000${news?.cover[3]?.image}`} alt="" />
+                    <h1 className='font-extrabold text-2xl tracking-wide '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{news?.cover[3]?.title}</h1>
                     </div>
 
-                    <div className='h-1/2 w-full p-2 py-4  overflow-hidden'>
+                    <div className='h-100 w-full p-2 py-4  overflow-hidden'>
 
-                    <img className='object-cover h-1/3 w-300 mb-5' src={dummy} alt="" />
-                    <h1 className='font-extrabold text-2xl tracking-wide '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;What a wonderful news to be reading right???</h1>
+                    <img className='object-cover h-1/3 w-300 mb-5' src={`http://localhost:3000${news?.cover[4]?.image}`} alt="" />
+                    <h1 className='font-extrabold text-2xl tracking-wide '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{news?.cover[4]?.title}</h1>
                     </div>
 
             </div>
             <div className='col-span-3 flex flex-wrap '>
 
-                <div className='h-5/7 relative  bg-stone-100 border-2 border-stone-400 '>
+                <ColumnCTA image={`http://localhost:3000${news?.cover[5]?.image}`} section="Opinión" author={news?.cover[4]?.username}
+                title={news?.cover[5]?.title}
+                content={news?.cover[5]?.content.slice(0,200)}
+               heightPassed={`${5/8*100}%`}
+               widthPassed={`${100}%`}>
+                </ColumnCTA>
 
-                <img className='h-1/3  w-300 object-cover' src={dummy} alt="" />
-                <div className='absolute  bottom-0 h-3/4 w-full flex justify-center'>
-                <div className='bg-stone-100 overflow-hidden px-2 w-4/5 h-full text-center py-2'>
-                <h1 className='font-extrabold text-lg tracking-widest'>OPINIÓN</h1>
-                <h2 className='font-bold text-sm tracking-widest'>David Sánchez</h2>
-                <h3 className='font-extrabold text-xl  pt-5 mb-5'>What a wonderful news to be reading right???</h3>
-                <h4 className=' w-full text-stone-700  font-normal text-sm  '>This is such an interes"This is such an interesting news and you will love to read it. ove to read it. Give it a chance, come onchance, come onting news and you will love to read it. Give it a chance, come on, "This is such an interesting news and you will love to read it. Give it a chance, come on, </h4>
+
+
+                <div className='h-2/8 w-full bg-red-100 p-5 flex flex-col justify-start items-start gap-4'>
+
+                <h1 className='text-lg font-bold tracking-widest underline underline-offset-2 text-stone-700'>Diario de mikas</h1>
+                <h2 className='text-sm '>Descubre uno de los diarios del grupo del momento: Los mikas</h2>
+                <h3 className='text-md text-right w-full cursor-pointer tracking-widest font-bold text-red-800 hover:underline hover:text-red-950 '>Saber más <i class="fa-solid fa-arrow-right"></i></h3>
 
                 
-
-
-
-                </div>
-                
-                </div>
                 </div>
 
             </div>
 
-
-        
         
         </article>
 
+            <article className='bg-stone-100 p-5 min-h-200 h-auto  w-full flex flex-row justify-between'>
+
+                <div className='w-3/4  pt-10  border-double  border-t-red-800 border-t-8 flex flex-row flex-wrap '>
+
+                <div className='w-full pb-5 border-b-red-800 border-b-2  h-95 grid grid-cols-3 gap-10 overflow-hidden'>
+
+        {/*aquí va haber que hacer un map para estas tres columnitas*/}
+
+        {news && news.middle?.map((n)=>{
+
+            return <div className='col-span-1  h-full '>
+
+                        <img  className='h-2/5 w-300 object-cover mb-5' src={`http://localhost:3000${n.image}`} alt="" />
+                        <h2 className='text-lg font-extrabold mb-5'><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{n.title}</h2>
+                        <h2 className='text-sm '>{n.subtitle}</h2>
+                    
+                    </div>
+
+
+        })}
+                </div>
+
+                <div className='w-full min-h-60 h-auto grid grid-cols-2 gap-5 p-5 '>
+
+                    {news && news.body?.map((n)=>{
+
+            return     <div className=' border-t-2 border-stone-200 h-35 col-span-1 flex gap-3 justify-between p-5'>
+                        <h1 className='text-md space-y-0.5 font-semibold w-3/5 '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{n.title}</h1>
+                        <img className='w-2/5 h-full object-cover' src={`http://localhost:3000${n.image}`} alt="" />
+                    </div>
+
+        })}
+                    
+                    
+                </div>
+
+
+                </div>
+                <div className='w-1/5   relative'>
+                <div className=' bg-gradient-to-r from-stone-100 to-red-200  sticky top-0 w-full h-120 text-center py-5'>
+                    <p className='text-9xl font-[Monoton] text-red-800'>G</p>
+                    <p className='text-4xl font-[Monoton]'>A</p>
+                    <p className='text-9xl font-[Monoton] text-red-800'>Z</p>
+                    <p className='text-5xl font-[Monoton]'>E</p>
+                    <p className='text-5xl font-[Monoton]'>T</p>
+                    <p className='text-5xl font-[Monoton]'>A</p>
+                    
+                </div>
+                
+                </div>
+            </article>
+
+            <article className='h-150 bg-stone-100 p-10' >
+
+                <h1 className='text-2xl mb-5 font-extrabold tracking-widest border-b-black border-b-2 w-1/2'>OPINIÓN</h1>
+                <div className='w-full h-full grid grid-cols-4 gap-5'>
+
+                    {/* esto se mapea en cuanto podamos también */}
+
+
+              {news && news.columns?.map((n)=>{
+
+            return  <ColumnCTA image={`http://localhost:3000${n.image}`} section="Opinión" author="David Sánchez"
+                title={n.title}
+                content={n.content.slice(0,220)}
+               heightPassed={`${9/10*100}%`}
+               widthPassed={``}>
+                </ColumnCTA>
+
+
+                     })}
+
+                   
+
+                </div>
+
+            </article>
+
+            <article className='h-auto min-h-100 bg-stone-100 p-10' >
+
+                <h1 className='text-2xl mb-5 font-extrabold tracking-widest border-b-black border-b-2 w-1/2'>LO MÁS LEÍDO</h1>
+                <div className='w-full h-full grid grid-cols-3 gap-5'>
+
+                    {/* esto se mapea en cuanto podamos también */}
+
+                    <div className='relative col-span-1 h-30 p-5 bg-stone-100 text-right '>
+
+                        <div className='absolute text-9xl top-0 h-40 w-30 text-center z-10 font-extrabold opacity-60 text-stone-900 left-0 '>1</div>
+                        <div className='w-4/5 h-4/5 p-4 bg-stone-200 absolute bottom-0 right-0 text-right flex items-end justify-end '>
+                        <h1 className='text-md space-y-0.5 font-semibold w-full text-right '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;What a wonderful news to be reading at this time...</h1>
+                        
+                        </div>
+
+                    </div>
+                    <div className='relative col-span-1 h-30 p-5 bg-stone-100 text-right '>
+
+                        <div className='absolute text-9xl top-0 h-40 w-30 text-center z-10 font-extrabold opacity-60 text-stone-900 left-0 '>2</div>
+                        <div className='w-4/5 h-4/5 p-4 bg-stone-200 absolute bottom-0 right-0 text-right flex items-end justify-end '>
+                        <h1 className='text-md space-y-0.5 font-semibold w-full text-right '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;What a wonderful news to be reading at this time...</h1>
+                        
+                        </div>
+
+                    </div>
+                    <div className='relative col-span-1 h-30 p-5 bg-stone-100 text-right '>
+
+                        <div className='absolute text-9xl top-0 h-40 w-30 text-center z-10 font-extrabold opacity-60 text-stone-900 left-0 '>3</div>
+                        <div className='w-4/5 h-4/5 p-4 bg-stone-200 absolute bottom-0 right-0 text-right flex items-end justify-end '>
+                        <h1 className='text-md space-y-0.5 font-semibold w-full text-right '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;What a wonderful news to be reading at this time...</h1>
+                        
+                        </div>
+
+                    </div>
+                    <div className='relative col-span-1 h-30 p-5 bg-stone-100 text-right '>
+
+                        <div className='absolute text-9xl top-0 h-40 w-30 text-center z-10 font-extrabold opacity-60 text-stone-900 left-0 '>4</div>
+                        <div className='w-4/5 h-4/5 p-4 bg-stone-200 absolute bottom-0 right-0 text-right flex items-end justify-end '>
+                        <h1 className='text-md space-y-0.5 font-semibold w-full text-right '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;What a wonderful news to be reading at this time...</h1>
+                        
+                        </div>
+
+                    </div>
+                    <div className='relative col-span-1 h-30 p-5 bg-stone-100 text-right '>
+
+                        <div className='absolute text-9xl top-0 h-40 w-30 text-center z-10 font-extrabold opacity-60 text-stone-900 left-0 '>5</div>
+                        <div className='w-4/5 h-4/5 p-4 bg-stone-200 absolute bottom-0 right-0 text-right flex items-end justify-end '>
+                        <h1 className='text-md space-y-0.5 font-semibold w-full text-right '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;What a wonderful news to be reading at this time...</h1>
+                        
+                        </div>
+
+                    </div>
+                    <div className='relative col-span-1 h-30 p-5 bg-stone-100 text-right '>
+
+                        <div className='absolute text-9xl top-0 h-40 w-30 text-center z-10 font-extrabold opacity-60 text-stone-900 left-0'>6</div>
+                        <div className='w-4/5 h-4/5 p-4 bg-stone-200 absolute bottom-0 right-0 text-right flex items-end justify-end '>
+                        <h1 className='text-md space-y-0.5 font-semibold w-full text-right '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;What a wonderful news to be reading at this time...</h1>
+                        
+                        </div>
+
+                    </div>
+                  
+
+                </div>
+
+            </article>
+</>
 }
