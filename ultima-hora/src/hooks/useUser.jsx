@@ -8,11 +8,11 @@ export function useUser(){
     const [groupInfo, setGroupInfo]=useState([])
     
     const params=useParams()
-   const [username, setUsername]=useState(params.username)
+   const [queryUsername, setQueryUsername]=useState(params.username)
 
    useEffect(()=>{
 
-    setUsername(params.username)
+    setQueryUsername(params.username)
 
    },[params])
 
@@ -20,13 +20,15 @@ export function useUser(){
 
    },[groupInfo])
 
-    
+ 
+    console.log(groups)
+    console.log(groupInfo)
 
     
         useEffect(()=> {
     
             
-            async function fetchData(){await fetch(`http://localhost:3000/user/search?username=${username}`).
+            async function fetchData(){await fetch(`http://localhost:3000/user/search?username=${queryUsername}`).
             then(r=>{
                 return r.json()
             }).then(r=>{
@@ -38,7 +40,7 @@ export function useUser(){
 
          let auth=`Bearer ${localStorage.getItem('token')?localStorage.getItem('token'):''}`
 
-            async function fetchGroups(){await fetch(`http://localhost:3000/groups/search?username=${username}`,
+            async function fetchGroups(){await fetch(`http://localhost:3000/groups/search?username=${queryUsername}`,
                 {
                     method:'GET',
                     headers:{
@@ -58,26 +60,26 @@ export function useUser(){
     fetchData()
     fetchGroups()
     
-            },[username])
+            },[queryUsername])
 
 
+            async function fetchMembers(){
+            
+                let newGroups=[] 
+                for(let g of groups){
+            
+                     let data=await fetch(`http://localhost:3000/usergroups/search?group=${g.groupName}`)
+                     let res= await data.json()
+                     let newGroup= {...g, members:res, showingMembers:false, showingNews:false}
+                     newGroups.push(newGroup)
+                     
+                    }
+                
+                    setGroupInfo(newGroups)
+            }
 
 useEffect(()=>{
 
-async function fetchMembers(){
-
-    let newGroups=[] 
-    for(let g of groups){
-
-         let data=await fetch(`http://localhost:3000/usergroups/search?group=${g.groupName}`)
-         let res= await data.json()
-         let newGroup= {...g, members:res, showingMembers:false, showingNews:false}
-         newGroups.push(newGroup)
-         
-        }
-    
-        setGroupInfo(newGroups)
-}
 
 fetchMembers()
 
@@ -111,7 +113,7 @@ fetchMembers()
     }
 
 
-return {user:user, groups:groups, groupInfo:groupInfo, handleMemberVisibility:handleMemberVisibility, handleNewsVisibility:handleNewsVisibility}
+return {user:user,queryUsername:queryUsername, groups:groups, groupInfo:groupInfo, handleMemberVisibility:handleMemberVisibility, handleNewsVisibility:handleNewsVisibility, fetchMembers:fetchMembers}
 
 
 }

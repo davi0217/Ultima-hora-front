@@ -11,8 +11,7 @@ export function useLogin(){
 
         ()=>{
 
-        
-            console.log('at useLogin arrived '+registered)
+            window.scrollTo(0,0)
             if(localStorage.getItem('token')){
                 setRegistered(true)
             }else{
@@ -23,7 +22,6 @@ export function useLogin(){
 
     useEffect(()=>{
 
-        console.log('actually my token is '+ localStorage.getItem('token'))
 
         let auth=`Bearer ${localStorage.getItem('token')?localStorage.getItem('token'):''}`
        
@@ -41,10 +39,12 @@ export function useLogin(){
                  
                     return r.json()}
             ).then((r)=>{
-                console.log(r)
+                
                 setRegisteredInfo(r)
             }).catch((error)=>{
-                console.log(error.message)
+                localStorage.clear('token')
+                setRegistered(false)
+                console.log(`Failed to login, maybe not token is to be found: `+error.message)
             })
         }
 

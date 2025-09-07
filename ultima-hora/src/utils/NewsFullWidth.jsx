@@ -1,10 +1,16 @@
 import {useState, useEffect, useRef, useContext} from 'react'
+import { Link } from 'react-router-dom'
 import {NewsContext} from '../App.jsx'
 
 import dummy from "../assets/news_img/dummy.jpg"
 import { ColumnCTA } from './ColumnCTA'
 
 export function NewsFullWidth(){
+
+    useEffect(()=>{
+
+window.scrollTo(0,0)
+  },[])
 
     const [dummyNews, setDummyNews]=useState({
         "general":[
@@ -20,6 +26,7 @@ export function NewsFullWidth(){
 
     const {useNewsFullWidth}=useContext(NewsContext)
     const {news}=useNewsFullWidth()
+ 
       
 
     
@@ -30,23 +37,27 @@ export function NewsFullWidth(){
 
             <div className='col-span-4 p-1  w-full flex flex-wrap gap-1'>
 
-                <div className='h-7/10 w-full  overflow-hidden'>
+                <Link to={`${news?.cover[0]?.news_id==0?'/':`/news/${news?.cover[0]?.news_id}`}`}><div className='h-7/10 w-full cursor-pointer  overflow-hidden'>
 
-                <h1 className='h-auto w-full  text-4xl font-extrabold mb-5  tracking-wide'> <span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{news?.cover[0]?.title}</h1>
+                <h1 className='h-auto w-full  text-4xl  font-extrabold mb-5  tracking-wide'> <span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{news?.cover[0]?.title}</h1>
                 <img className='w-400 h-70 object-cover mb-5' src={`http://localhost:3000${news?.cover[0]?.image}`} alt="" />
                 <h2 className='h-auto w-full  font-normal text-sm break-all   '>{news?.cover[0]?.content.slice(0,200)} </h2>
                 
                 
-                </div>
+                </div></Link>
+
                 <div className='h-3/10 w-full  grid grid-cols-2 gap-5 '>
 
-                <div className='col-span-1 h-full  overflow-hidden'>
+               <Link to={`${news?.cover[1]?.news_id==0?'/':`/news/${news?.cover[1]?.news_id}`}`}>  <div className='col-span-1 h-full  overflow-hidden'>
                                     <h2 className=' w-full text-stone-700  font-bold text-sm break-all   '> <span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{news?.cover[1]?.content.slice(0,200)} </h2>
                 </div>
+                </Link>
+                <Link to={`${news?.cover[2]?.news_id==0?'/':`/news/${news?.cover[2]?.news_id}`}`}>
                 <div className='col-span-1 h-full  overflow-hidden'>
                                     <h2 className=' w-full text-stone-700  font-bold text-sm break-all  '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{news?.cover[2]?.content.slice(0,200)} </h2>
 
                 </div>
+                </Link>
                 
 
                 </div>
@@ -54,27 +65,32 @@ export function NewsFullWidth(){
 
             </div>
             <div className='col-span-2 h-200 flex flex-wrap divide-y-2 divide-stone-400'>
+                   <Link to={`${news?.cover[3]?.news_id==0?'/':`/news/${news?.cover[3]?.news_id}`}`}>
                     <div className='h-100 w-full p-2  py-4  overflow-hidden'>
 
                     <img className='object-cover h-1/3 w-300 mb-5' src={`http://localhost:3000${news?.cover[3]?.image}`} alt="" />
                     <h1 className='font-extrabold text-2xl tracking-wide '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{news?.cover[3]?.title}</h1>
                     </div>
+                    </Link>
 
+                    <Link to={`${news?.cover[4]?.news_id==0?'/':`/news/${news?.cover[4]?.news_id}`}`}> 
                     <div className='h-100 w-full p-2 py-4  overflow-hidden'>
 
                     <img className='object-cover h-1/3 w-300 mb-5' src={`http://localhost:3000${news?.cover[4]?.image}`} alt="" />
                     <h1 className='font-extrabold text-2xl tracking-wide '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{news?.cover[4]?.title}</h1>
                     </div>
+                    </Link>
 
             </div>
             <div className='col-span-3 flex flex-wrap '>
-
-                <ColumnCTA image={`http://localhost:3000${news?.cover[5]?.image}`} section="Opinión" author={news?.cover[4]?.username}
-                title={news?.cover[5]?.title}
-                content={news?.cover[5]?.content.slice(0,200)}
-               heightPassed={`${5/8*100}%`}
+                <Link to={`${news?.columns[0]?.news_id==0?'/':`/news/${news?.columns[0]?.news_id}`}`}>
+                <ColumnCTA image={`http://localhost:3000${news?.columns[0]?.image}`} section="Opinión" author={news?.columns[0]?.username}
+                title={news?.columns[0]?.title}
+                content={news?.columns[0]?.content.slice(0,200)}
+               heightPassed={`${9/10*100}%`}
                widthPassed={`${100}%`}>
                 </ColumnCTA>
+                </Link>
 
 
 
@@ -102,14 +118,15 @@ export function NewsFullWidth(){
 
         {news && news.middle?.map((n)=>{
 
-            return <div className='col-span-1  h-full '>
+            return <Link to={`${n.news_id==0?'/':`/news/${n.news_id}`}`}> 
+            <div className='col-span-1  h-full '>
 
-                        <img  className='h-2/5 w-300 object-cover mb-5' src={`http://localhost:3000${n.image}`} alt="" />
-                        <h2 className='text-lg font-extrabold mb-5'><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{n.title}</h2>
-                        <h2 className='text-sm '>{n.subtitle}</h2>
+                        <img  className='h-2/5 w-300 object-cover mb-5' src={`http://localhost:3000${n?.image}`} alt="" />
+                        <h2 className='text-lg font-extrabold mb-5'><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{n?.title}</h2>
+                        <h2 className='text-sm '>{n?.subtitle}</h2>
                     
                     </div>
-
+                </Link>
 
         })}
                 </div>
@@ -118,11 +135,12 @@ export function NewsFullWidth(){
 
                     {news && news.body?.map((n)=>{
 
-            return     <div className=' border-t-2 border-stone-200 h-35 col-span-1 flex gap-3 justify-between p-5'>
-                        <h1 className='text-md space-y-0.5 font-semibold w-3/5 '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{n.title}</h1>
-                        <img className='w-2/5 h-full object-cover' src={`http://localhost:3000${n.image}`} alt="" />
+            return    <Link to={`${n.news_id==0?'/':`/news/${n.news_id}`}`}>
+             <div className=' border-t-2 border-stone-200 h-35 col-span-1 flex gap-3 justify-between p-5'>
+                        <h1 className='text-md space-y-0.5 font-semibold w-3/5 '><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{n?.title}</h1>
+                        <img className='w-2/5 h-full object-cover' src={`http://localhost:3000${n?.image}`} alt="" />
                     </div>
-
+                            </Link>
         })}
                     
                     
@@ -152,14 +170,17 @@ export function NewsFullWidth(){
                     {/* esto se mapea en cuanto podamos también */}
 
 
-              {news && news.columns?.map((n)=>{
+              {news && news.columns?.slice(1, news?.columns?.length-1).map((n)=>{
 
-            return  <ColumnCTA image={`http://localhost:3000${n.image}`} section="Opinión" author="David Sánchez"
-                title={n.title}
-                content={n.content.slice(0,220)}
+            return <Link to={`${n.news_id==0?'/':`/news/${n.news_id}`}`}> 
+            
+            <ColumnCTA image={`http://localhost:3000${n?.image}`} section="Opinión" author={n?.username}
+                title={n?.title}
+                content={n?.content.slice(0,220)}
                heightPassed={`${9/10*100}%`}
                widthPassed={``}>
                 </ColumnCTA>
+                </Link>
 
 
                      })}

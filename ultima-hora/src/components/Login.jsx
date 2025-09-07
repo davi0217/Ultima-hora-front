@@ -5,6 +5,11 @@ import {NewsContext} from '../App.jsx'
 
 export function Login(){
 
+    useEffect(()=>{
+
+window.scrollTo(0,0)
+  },[])
+
     const navigate=useNavigate()
 
     const handleNavigation=function(route){

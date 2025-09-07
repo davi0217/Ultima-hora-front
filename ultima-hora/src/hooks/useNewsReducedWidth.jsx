@@ -1,13 +1,18 @@
 import {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
 
-export function useNewsFullWidth(){
+export function useNewsReducedWidth(){
+
+    useEffect(()=>{
+        window.scrollTo(0,0)
+    },[])
 
     const [news, setNews]=useState({
             "header":"",
             "cover":[],
-            "middle":[],
+            "firstMiddle":[],
             "body":[],
+            "secondMiddle":[],
             "columns":[],
             "moreViewed":[]
     
@@ -37,7 +42,7 @@ export function useNewsFullWidth(){
         const section=params.section?params.section:false
         const header=params.header?params.header:false
 
-       
+
 
         let urlToPass=`http://localhost:3000/news/search?${section?'section='+section:''}${section&&header?'&':''}${header?'header='+header:''}`
      
@@ -48,12 +53,12 @@ export function useNewsFullWidth(){
                 return r.json()
             }).then(r=>{
               
-           
+          
              let newCover=[]
             let counter=0
             let l=0
             
-            while(newCover.length<5){
+            while(newCover.length<1){
               
             if(!r[l]){
                      newCover.push(newsDummy)
@@ -70,13 +75,13 @@ export function useNewsFullWidth(){
             }
 
             }
-
+          
             let newColumns=[]
 
             let z=0
 
-             while(newColumns.length<=5){
-                
+             while(newColumns.length<=3){
+       
             if(!r[z]){
                      newColumns.push(newsDummy)
                      continue
@@ -93,18 +98,18 @@ export function useNewsFullWidth(){
             }
 
           
-            let newMiddle=[]
+            let newFirstMiddle=[]
             let i=counter
             
-            while(newMiddle.length<3){
+            while(newFirstMiddle.length<3){
                
             if(!r[i]){
-                     newMiddle.push(newsDummy)
+                     newFirstMiddle.push(newsDummy)
                      continue
                 }
                 
                 if( r[i]?.section!='Opinión'){
-                newMiddle.push(r[i])
+                newFirstMiddle.push(r[i])
                 i++
                 counter++
             }else if(r[i]?.section=='Opinión'){
@@ -113,12 +118,13 @@ export function useNewsFullWidth(){
             }
 
             }
-   
+           
+           
             let newBody=[]
 
             let n=counter
 
-            while(newBody.length<8){
+            while(newBody.length<=5){
                
             if(!r[n]){
                      newBody.push(newsDummy)
@@ -136,16 +142,37 @@ export function useNewsFullWidth(){
 
             }
 
+            let newSecondMiddle=[]
+            let x=counter
+            
+            while(newSecondMiddle.length<=3){
+               
+            if(!r[x]){
+                     newSecondMiddle.push(newsDummy)
+                     continue
+                }
+                
+                if( r[x]?.section!='Opinión'){
+                newSecondMiddle.push(r[x])
+                x++
+                counter++
+            }else if(r[x]?.section=='Opinión'){
+                x++
+                counter++
+            }
+
+            }
+
           
 
             let headerToPass=header?header:'GAZETA'
     
-            
             setNews({
                 "header":headerToPass,
-                "cover":[...newCover],
-                "middle":newMiddle,
+                "cover":newCover,
+                "firstMiddle":newFirstMiddle,
                 "body":newBody,
+                "secondMiddle":newSecondMiddle,
                 "columns":newColumns
             })
         
@@ -157,7 +184,7 @@ export function useNewsFullWidth(){
     
             },[params])
 
-           
+             
 
 return {news:news}
 
