@@ -13,6 +13,8 @@ export function useNewsFullWidth(){
     
         })
 
+    const [mostLiked, setMostLiked]=useState([])
+
     const params=useParams() 
 
     
@@ -21,12 +23,12 @@ export function useNewsFullWidth(){
 
         const newsDummy={
     "news_id": "0",
-    "title": "Nueva noticia",
+    "title": "Empieza a escribir una nueva noticia ", //60 chars
     "date": "2025-09-05T16:07:34.000Z",
     "subtitle": "¿A qué esperas para empezar a compartir tus noticias?",
     "caption": "Acompáñala de una imagen",
     "content": "Consequat tempor ipsum sed dolor ea veniam ut dolor consequat. Sed eiusmod ad tempor exercitation labore exercitation aliquip quis ut adipiscing minim laboris. Nisi lorem ex minim magna aliquip elit et adipiscing ex. Adipiscing ipsum nostrud ex lorem magna nostrud minim tempor ipsum quis adipiscing do ut. Incididunt magna ut sit consectetur do sed ut nostrud consequat labore adipiscing sit. Labore sit ex ullamco nisi sit aliqua.Adipiscing ipsum nisi ullamco nostrud et. Adipiscing minim dolore ex ad elit consectetur ea. Enim ea adipiscing ut aliquip aliqua consequat amet. Ut quis ad veniam ut nostrud dolore commodo ad consequat ut. Ullamco sed lorem lorem consectetur ullamco elit.",
-    "image": "/static/imgs/dummy.jpg",
+    "image": "static/imgs/dummy.jpg",
     "username": "xxxxx",
     "header": "XXXXXXXXXX",
     "header_id":0,
@@ -40,9 +42,15 @@ export function useNewsFullWidth(){
        
 
         let urlToPass=`http://localhost:3000/news/search?${section?'section='+section:''}${section&&header?'&':''}${header?'header='+header:''}`
+        let auth=`Bearer ${localStorage.getItem('token')?localStorage.getItem('token'):''}`
      
             
-            async function fetchData(){await fetch(urlToPass).
+            async function fetchData(){await fetch(urlToPass,{
+                method:'GET',
+                headers:{
+                    Authorization: auth
+                }
+            }).
             then(r=>{
               
                 return r.json()
@@ -136,6 +144,26 @@ export function useNewsFullWidth(){
 
             }
 
+            let allColumns=[]
+
+            let w=0
+
+            while(allColumns.length<15){
+               
+            if(!r[w]){
+                     allColumns.push(newsDummy)
+                     continue
+                }
+                
+                if( r[w]?.section=='Opinión'){
+                allColumns.push(r[w])
+                w++
+            }else if(r[w]?.section!='Opinión'){
+                w++
+            }
+
+            }
+
           
 
             let headerToPass=header?header:'GAZETA'
@@ -146,7 +174,8 @@ export function useNewsFullWidth(){
                 "cover":[...newCover],
                 "middle":newMiddle,
                 "body":newBody,
-                "columns":newColumns
+                "columns":newColumns,
+                "allColumns":allColumns
             })
         
             
@@ -157,9 +186,57 @@ export function useNewsFullWidth(){
     
             },[params])
 
+
+    useEffect(()=> {
+
+        
+        
+        
+
+        let urlToPass=`http://localhost:3000/news/most-liked`
+     
+            
+            async function fetchMostLiked(){await fetch(urlToPass).
+            then(r=>{
+              
+                return r.json()
+            }).then(r=>{
+              
+           
+             let newMostLiked=[]
+            
+            let l=0
+            
+            while(newMostLiked.length<6){
+              
+            if(!r[l]){
+                    
+                    break
+                }
+                
+                if( r[l]?.section!='Opinión'){
+                newMostLiked.push(r[l])
+                l++
+              
+            }else if(r[l]?.section=='Opinión'){
+                l++
+            }
+
+            }
+ 
+            setMostLiked(newMostLiked)
+        
+            
+        })
+    }
+
+    fetchMostLiked()
+    
+            },[params])
+
            
 
-return {news:news}
+return {news:news, mostLiked:mostLiked}
 
 
 }

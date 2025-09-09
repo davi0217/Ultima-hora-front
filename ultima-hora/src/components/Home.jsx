@@ -13,21 +13,21 @@ export function Home(){
     useEffect(()=>{
 
 window.scrollTo(0,0)
-  },[])
+  },[params])
 
   
 
-    return <main class='font-[Saira]'>
+    return <main class='font-[Saira] '>
    
             <Navigator>
 
             </Navigator>
-            <section className=' hidden lg:inline-block p-10'>
+            <section className='w-full hidden lg:inline-block p-10 pt-60'>
             <NewsFullWidth>
 
             </NewsFullWidth>
             </section>
-            <section className=' lg:hidden flex p-10'>
+            <section className='w-full lg:hidden flex p-0 sm:p-10 pt-20'>
             <NewsReducedWidth>
 
             </NewsReducedWidth>

@@ -95,7 +95,7 @@ fetchGroups()
     }>
 
         <label className='font-bold text-sm sm:text-xl tracking-wide text-stone-500' htmlFor="name">Nombre de la nueva cabecera</label>
-        <input type="text" name='name' required id='name' maxLength={30} className='w-full h-10 border-2 border-red-800 my-4 px-5 ' />
+        <input type="text" name='name' required id='name' maxLength={20} className='w-full h-10 border-2 border-red-800 my-4 px-5 ' />
         <label className='font-bold text-sm sm:text-xl tracking-wide text-stone-500' htmlFor="name">Una descripción breve</label>
         <input type="text" name='description' required id='desciption' maxLength={300} className='w-full h-10 border-2 border-red-800 my-4 px-5 ' />
         <label className='font-bold text-sm sm:text-xl tracking-wide text-stone-500' htmlFor="publico">Público</label>

@@ -18,6 +18,8 @@ export function IndividualNews(){
         setLetComment(!letComment)
     }
 
+   
+
     useEffect(()=>{
 
 window.scrollTo(0,0)
@@ -32,27 +34,27 @@ window.scrollTo(0,0)
     return <>
     <Navigator></Navigator>
 
-    { newsInfo && <article className='w-full font-[Saira] grid gap-5 grid-cols-10 items-start justify-start  p-8 pt-15 bg-stone-100 h-auto'>
+    { newsInfo && <article className='w-full pt-30 lg:pt-70 font-[Saira] grid gap-5 grid-cols-10 items-start justify-start  p-8  bg-stone-100 h-auto'>
 
         
 
-        <section className='  col-span-10 sm:col-span-7 flex flex-col items-start justify-start gap-8'>
+        <section className='overflow-hidden  col-span-10 sm:col-span-7 flex flex-col items-start justify-start gap-8'>
 
             <h1 className=' font-extrabold text-2xl sm:text-4xl md:text-6xl break-auto hyphens-auto'>{newsInfo[0].title}</h1>
             <h2 className=' font-bold text-lg sm:text-2xl md:text-3xl text-stone-500 break-auto hyphens-auto'>{newsInfo[0].subtitle}</h2>
-            <img className=' max-h-155 object-cover' src={`http://localhost:3000${newsInfo[0].image}`} alt="" />
+            <img className=' max-h-155 object-cover' src={`http://localhost:3000/${newsInfo[0].image}`} alt="" />
             <span className='-mt-5 col-span-5 font-thin text-[10px] sm:text-md text-stone-600 '>{newsInfo[0].caption}</span>
         </section>
-                <div className='hidden sticky top-0  col-span-3 col-start-8  h-150 bg-[url(./assets/logos/red-marble.jpg)] bg-stone-500 bg-blend-multiply bg-center bg-size-[1000px]  md:flex flex-col items-center justify-start gap-5 pt-5 '>
-                    <p className='text-8xl font-[Monoton] text-red-700 sticky top-5 pb-20'>G</p>
+                <div className='hidden sticky top-20   col-span-3 col-start-8  h-150 bg-[url(./assets/logos/red-marble.jpg)] bg-stone-500 bg-blend-multiply bg-center bg-size-[1000px]  md:flex flex-col items-center justify-start gap-5 pt-5 lg:pt-10 '>
+                    <p className='text-8xl font-[Monoton] text-red-700 sticky top-20 lg:top-35 pb-20'>G</p>
                     <p className='text-xl font-[Monoton] text-stone-200 -mt-20'>A</p>
-                    <p className='text-6xl font-[Monoton] text-red-700 sticky top-25'>Z</p>
+                    <p className='text-6xl font-[Monoton] text-red-700 sticky top-55 lg:top-65'>Z</p>
                     <p className='text-xl font-[Monoton] text-stone-200'>E</p>
                     <p className='text-xl font-[Monoton] text-stone-200'>T</p>
                     <p className='text-xl font-[Monoton] text-stone-200'>A</p>
                     </div>
 
-        <section className=' col-span-10 mt-5 sm:col-span-7 flex flex-col items-start justify-start gap-8'>
+        <section className=' relative overflow-hidden col-span-10 mt-5 sm:col-span-7 flex flex-col items-start justify-start gap-8'>
             {likes && <div className='flex gap-2 items-center'>
 
                 <i onClick={()=>{
@@ -116,7 +118,11 @@ window.scrollTo(0,0)
           <Link to={`/user/${newsInfo[0].username}`}>  <p className=' font-bold text-md sm:text-xl md:text-break-auto hyphens-auto'>{newsInfo[0].username}</p></Link> <Link to={`/header/${newsInfo[0].header}`}> <p>{`   |  ${newsInfo[0].header}`}</p></Link>
             </div>
             <span className=' font-thin -mt-8 text-xs sm:text-sm md:text-break-auto hyphens-auto'>{newsInfo[0].date.slice(0,10)}</span>
-            <h2 className=' font-normal text-sm sm:text-md md:text-lg text-black break-auto hyphens-auto'>{newsInfo[0].content+' Hace un siglo, la radio irrumpió en los hogares con una fuerza imparable. La primera transmisión masiva fue un parteaguas que cambió la manera en la que el mundo se comunicaba, creando un nuevo tejido social alrededor de las ondas sonoras.Hace un siglo, la radio irrumpió en los hogares con una fuerza imparable. La primera transmisión masiva fue un parteaguas que cambió la manera en la que el mundo se comunicaba, creando un nuevo tejido social alrededor de las ondas sonoras.'} </h2>
+            <h2 className=' font-normal text-sm sm:text-md md:text-lg text-black break-auto whitespace-pre-wrap  hyphens-auto'>{newsInfo[0].content +' Hace un siglo, la radio irrumpió en los hogares con una fuerza imparable. La primera transmisión masiva fue un parteaguas que cambió la manera en la que el mundo se comunicaba, creando un nuevo tejido social alrededor de las ondas sonoras.Hace un siglo, la radio irrumpió en los hogares con una fuerza imparable. La primera transmisión masiva fue un parteaguas que cambió la manera en la que el mundo se comunicaba, creando un nuevo tejido social alrededor de las ondas sonoras.'} </h2>
+           {!registeredInfo && <div className='absolute flex px-10 justify-center items-end pb-5 bottom-0 w-full h-30 bg-gradient-to-t rounded-lg from-red-800 to-stone-100'>
+             <Link to='/login'> <h2 className='white cursor-pointer text-center font-extrabold lg:text-2xl md:text-xl text-lg text-white tracking-wide'>Inicia sesión para leer la noticia completa</h2></Link>
+            </div>}
+        
         </section>
 
         
@@ -164,7 +170,7 @@ window.scrollTo(0,0)
         {comments.users?.length>0 && comments.users.map((c)=>{
                 return <div className='col-span-9 lg:col-span-8 mb-5  bg-red-800 rounded-xl flex flex-col items-start justify-start'>
                     <div className=' w-full p-3 px-5 rounded-t-xl flex items-center gap-10 bg-stone-100 border-b-4 border-red-900'>
-                        <img className='w-11 h-11   sm:w-16 sm:h-16 rounded-full' src={`http://localhost:3000${c.image}`} alt="" /> <span className='font-extrabold text-md sm:text-xl col-span-3'>{c.username}</span>
+                        <img className='w-11 h-11   sm:w-16 sm:h-16 object-cover rounded-full' src={`http://localhost:3000/${c.image}`} alt="" /> <span className='font-extrabold text-md sm:text-xl col-span-3'>{c.username}</span>
                     </div>
                         
                     {c.comments.map((comment)=>{

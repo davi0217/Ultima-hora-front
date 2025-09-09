@@ -3,6 +3,18 @@ import {useNavigate} from 'react-router-dom'
 
 export function Register(){
 
+    const [error,setError]=useState(
+        {
+            type:'',
+            text:''
+        }
+    )
+
+    function handleError(type, text){
+
+setError({type:type, text:text})
+
+    }
     useEffect(()=>{
 
 window.scrollTo(0,0)
@@ -25,15 +37,18 @@ window.scrollTo(0,0)
 
     <h1 className='w-full text-center font-extrabold tracking-widest text-md md:text-xl py-5 text-stone-600 border-b-stone-200 border-b-2 '>REGÍSTRATE</h1>
 
-    <form className='w-full p-5' action="post" encType='multipart/form-data' onSubmit={(e)=>{
+    <form className='w-full p-5' onChange={()=>{
+        handleError('','')
+    }} action="post" encType='multipart/form-data' onSubmit={(e)=>{
 
         e.preventDefault()
 
-        console.log(e.target.profile.value.replace('C:\\fakepath\\',''))
-        console.log(e.target.profile.files)
+       
+
+     
 
         if(e.target.password.value!=e.target.passwordRepeat.value){
-            console.log('password doesnt match')
+            handleError('password','La contraseña no coincide')
             return 
         }
 
@@ -67,16 +82,23 @@ window.scrollTo(0,0)
             console.log(r)
             
             if(r){
+                if(!r.token){
+                    handleError('repeatedUsername','El nombre de usuario ya existe')
+                    window.scrollTo(0,0)
+                    return 
+                }
                 localStorage.setItem('token', r.token)
                 console.log('im just registered')
-                /* handleNavigation('/') */
+            handleNavigation('/') 
             }
-        }) 
+        }).catch((error)=>{
+            return 
+        })
 
     }
 
     }>
-
+        <h1 className={` ${error?.type=='repeatedUsername'?'':'opacity-0'} w-full h-15 text-center font-bold tracking-widest text-[13px] md:text-lg py-5 text-red-500   `}>{error.text}</h1>
         <label className='font-bold text-sm sm:text-xl tracking-wide text-stone-500' htmlFor="name">Nombre de usuario</label>
         <input type="text" name='username' required id='username' className='w-full h-10 border-2 border-red-800 my-4 px-5 ' />
         <label className='font-bold text-sm sm:text-xl tracking-wide text-stone-500' htmlFor="name">Nombre</label>
@@ -98,6 +120,8 @@ window.scrollTo(0,0)
 
         <label className='font-bold text-sm sm:text-xl tracking-wide text-stone-500 ' htmlFor="password">Selecciona una foto</label>
         <input  type="file" name='profile' required id='profile' accept='.jpg, .jpeg, .png'  className='w-full cursor-pointer my-5 h-10 bg-red-800 p-2 rounded-md text-white ' />
+        <h1 className={` ${error?.type=='password'?'':'opacity-0'} w-full h-15 text-center font-bold tracking-widest text-[13px] md:text-lg py-5 text-red-500   `}>{error.text}</h1>
+
         <label className='font-bold text-sm sm:text-xl tracking-wide text-stone-500 ' htmlFor="password">Contraseña</label>
         <input type="password" name='password' required id='password' className='w-full h-10 border-2 mb-4 border-red-800 mt-4 px-5 ' />
         <label className='font-bold text-sm sm:text-xl tracking-wide text-stone-500' htmlFor="passwordRepeat">Repetir contraseña</label>

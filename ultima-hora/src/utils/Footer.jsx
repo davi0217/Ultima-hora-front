@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react'
+import { Link } from 'react-router-dom'
 
 export function Footer(){
 
@@ -24,6 +25,26 @@ export function Footer(){
 
     }
 
+    const [headers, setHeaders]=useState()
+console.log(headers)
+    useEffect(()=>{
+
+        async function fetchHeaders(){
+
+            fetch('http://localhost:3000/headers',{
+                method:'GET'
+            }).then((r)=>{return r.json()}).then((r)=>{
+                console.log(r)
+                setHeaders(r.headers)}).catch((error)=>{
+                console.log(error)
+            })
+        }
+
+        fetchHeaders()
+
+
+    },[])
+
     return <section className=' bg-red-800'>
         <h1 className='w-full pt-5 lg:text-left text-center lg:pl-10 text-6xl   text-black font-[Monoton]'>GAZETA</h1>
   <section className='w-full grid grid-cols-1 lg:grid-cols-3 h-auto lg:h-100 p-10 gap-5 lg:gap-10  '>
@@ -34,12 +55,12 @@ export function Footer(){
                 handleVisibility('secciones')
             }} className=' text-2xl md:text-4xl text-center lg:text-start font-bold text-white tracking-widest cursor-pointer mb-5'>SECCIONES <i className={`fa-solid ${sectionsVisibility.secciones.visibility?'fa-caret-up':'fa-caret-down'}  inline-block lg:opacity-0 opacity-90`}></i></h1>
             <div className={` ${sectionsVisibility.secciones.visibility?'h-full mb-5':'hidden lg:flex'} transition-all duration-150 flex flex-col items-center lg:items-start`}>
-            <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >General</h4>
-            <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >Carrera</h4>
-            <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >Amor</h4>
-            <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >Gente</h4>
-            <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >Opinión</h4>
-            <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >En pasado</h4>
+           <Link to='/'> <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >General</h4></Link>
+           <Link to='/section/Carrera'> <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >Carrera</h4></Link>
+           <Link to='/section/Amor'> <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >Amor</h4></Link>
+            <Link to='/section/Gente'> <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >Gente</h4></Link>
+           <Link to='/section/Opinión'> <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >Opinión</h4></Link>
+            <Link to='/section/En pasado'><h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >En pasado</h4></Link>
             </div>
         </div>
         <div className='col-span-1  flex flex-col h-ful lg:justify-start justify-center items-center mb-10 lg:mb-0 lg:items-start'>
@@ -48,10 +69,14 @@ export function Footer(){
                 handleVisibility('diarios')
             }}  className='text-2xl md:text-4xl w-full text-center lg:text-start font-bold text-white tracking-widest cursor-pointer mb-17 lg:mb-5'>DIARIOS EN TENDENCIA <i class={`fa-solid ${sectionsVisibility.diarios.visibility?'fa-caret-up':'fa-caret-down'} lg:opacity-0 opacity-90 inline-block`}></i></h1>
            <div className={`${sectionsVisibility.diarios.visibility?'h-full':'hidden lg:flex'}  transition-all duration-150 flex flex-col items-center lg:items-start gap-3 `}>
-            <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >Diario de los diegos</h4>
-            <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >Les amis</h4>
-            <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >Los chicos</h4>
-            <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >Les gars</h4>
+
+            {headers && headers.filter((h)=>{return h.public==true}).slice(0,4).map((h)=>{
+                return <Link to={`/header/${h.name}`}>
+                
+                <h4 className='text-lg text-red-50 hover:underline underline-offset-2 mb-3 cursor-pointer' >{h.name}</h4>
+</Link>
+            })}
+           
             </div>
         </div>
 

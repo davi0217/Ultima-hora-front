@@ -18,6 +18,8 @@ export function useNewsReducedWidth(){
     
         })
 
+    const [mostLiked, setMostLiked]=useState([])
+
     const params=useParams() 
 
     
@@ -26,12 +28,12 @@ export function useNewsReducedWidth(){
 
         const newsDummy={
     "news_id": "0",
-    "title": "Nueva noticia",
+    "title": "Empieza a escribir una nueva noticia",
     "date": "2025-09-05T16:07:34.000Z",
     "subtitle": "¿A qué esperas para empezar a compartir tus noticias?",
     "caption": "Acompáñala de una imagen",
     "content": "Consequat tempor ipsum sed dolor ea veniam ut dolor consequat. Sed eiusmod ad tempor exercitation labore exercitation aliquip quis ut adipiscing minim laboris. Nisi lorem ex minim magna aliquip elit et adipiscing ex. Adipiscing ipsum nostrud ex lorem magna nostrud minim tempor ipsum quis adipiscing do ut. Incididunt magna ut sit consectetur do sed ut nostrud consequat labore adipiscing sit. Labore sit ex ullamco nisi sit aliqua.Adipiscing ipsum nisi ullamco nostrud et. Adipiscing minim dolore ex ad elit consectetur ea. Enim ea adipiscing ut aliquip aliqua consequat amet. Ut quis ad veniam ut nostrud dolore commodo ad consequat ut. Ullamco sed lorem lorem consectetur ullamco elit.",
-    "image": "/static/imgs/dummy.jpg",
+     "image": "static/imgs/dummy.jpg",
     "username": "xxxxx",
     "header": "XXXXXXXXXX",
     "header_id":0,
@@ -45,9 +47,15 @@ export function useNewsReducedWidth(){
 
 
         let urlToPass=`http://localhost:3000/news/search?${section?'section='+section:''}${section&&header?'&':''}${header?'header='+header:''}`
+        let auth=`Bearer ${localStorage.getItem('token')?localStorage.getItem('token'):''}`
      
             
-            async function fetchData(){await fetch(urlToPass).
+            async function fetchData(){await fetch(urlToPass,{
+                method:'GET',
+                headers:{
+                    Authorization: auth
+                }
+            }).
             then(r=>{
               
                 return r.json()
@@ -142,26 +150,27 @@ export function useNewsReducedWidth(){
 
             }
 
-            let newSecondMiddle=[]
-            let x=counter
-            
-            while(newSecondMiddle.length<=3){
+            let allColumns=[]
+
+            let w=0
+
+            while(allColumns.length<15){
                
-            if(!r[x]){
-                     newSecondMiddle.push(newsDummy)
+            if(!r[w]){
+                     allColumns.push(newsDummy)
                      continue
                 }
                 
-                if( r[x]?.section!='Opinión'){
-                newSecondMiddle.push(r[x])
-                x++
-                counter++
-            }else if(r[x]?.section=='Opinión'){
-                x++
-                counter++
+                if( r[w]?.section=='Opinión'){
+                allColumns.push(r[w])
+                w++
+            }else if(r[w]?.section!='Opinión'){
+                w++
             }
 
             }
+
+            
 
           
 
@@ -172,10 +181,10 @@ export function useNewsReducedWidth(){
                 "cover":newCover,
                 "firstMiddle":newFirstMiddle,
                 "body":newBody,
-                "secondMiddle":newSecondMiddle,
-                "columns":newColumns
+                "columns":newColumns,
+                "allColumns":allColumns
             })
-        
+        console.log(allColumns)
             
         })
     }
@@ -184,9 +193,56 @@ export function useNewsReducedWidth(){
     
             },[params])
 
-             
+     useEffect(()=> {
 
-return {news:news}
+        
+        
+        
+
+        let urlToPass=`http://localhost:3000/news/most-liked`
+     
+            
+            async function fetchMostLiked(){await fetch(urlToPass).
+            then(r=>{
+              
+                return r.json()
+            }).then(r=>{
+              
+           
+             let newMostLiked=[]
+            
+            let l=0
+            
+            while(newMostLiked.length<4){
+              
+            if(!r[l]){
+                    
+                    break
+                }
+                
+                if( r[l]?.section!='Opinión'){
+                newMostLiked.push(r[l])
+                l++
+              
+            }else if(r[l]?.section=='Opinión'){
+                l++
+            }
+
+            }
+ 
+            setMostLiked(newMostLiked)
+        
+            
+        })
+    }
+
+    fetchMostLiked()
+    
+            },[params])
+
+     console.log(news)        
+
+return {news:news, mostLiked:mostLiked}
 
 
 }

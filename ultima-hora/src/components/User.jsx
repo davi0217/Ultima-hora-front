@@ -70,7 +70,7 @@ window.scrollTo(0,0)
     
     <Navigator></Navigator>
 
-    <div className='w-full grid grid-cols-10  h-auto p-10 gap-10 relative '>
+    <div className='w-full lg:pt-70 pt-30 grid grid-cols-10  h-auto p-10 gap-10 relative '>
 
         <div className={`${queryUsername==registeredInfo?.username?'':'hidden'} col-span-1 flex items-center h-10 `}>
             <i className='fa-solid fa-magnifying-glass'></i>
@@ -82,7 +82,7 @@ window.scrollTo(0,0)
             }} 
             className=' w-full h-full px-10 sm:text-sx text-md font-thin tracking-widest text-red-800 rounded-md border-red-900 border-2' type="text" placeholder="Únete a un grupo..." />
             </div>
-            {groupsSearched?.length>0 && searchValue.trim()!='' && <div className='absolute z-20 top-20 pt-5 px-5  w-full flex flex-col  h-auto justify-start items-start'>
+            {groupsSearched?.length>0 && searchValue.trim()!='' && <div className='absolute z-20 top-80 pt-5 px-5  w-full flex flex-col  h-auto justify-start items-start'>
 
                 {groupsSearched.map((g)=>{
 
@@ -120,9 +120,9 @@ window.scrollTo(0,0)
        
 
         <div className={` col-span-8 col-start-2   md:col-span-6 md:col-start-3 lg:col-span-3 bg-stone-100 flex flex-col items-start justify-start p-3 ${showRequests?'':'max-h-150'}`}>
-            <div className='w-15 h-15 rounded-full overflow-hidden'>
-            <img className='  object-cover scale-x-200 scale-y-200  mb-6' src={`http://localhost:3000/${user?.image}`} alt="" />
-            </div>
+            
+            <img className='  object-cover w-15 h-15 rounded-full border-double border-4 border-red-800   mb-6' src={`http://localhost:3000/${user?.image}`} alt="" />
+          
             <h1 className='font-extrabold tracking-widest w-full text-2xl'>{user?.username}</h1>
             <h1 className='font-bold w-full text-md border-b-2 pb-4 border-red-800'>{user?.city}, {user?.country}</h1>
             <h2 className='text-md pt-2 '>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus illo eos labore autem quibusdam nostrum nisi aperiam et, recusandae sed fuga itaque voluptates cupiditate vero, ratione explicabo culpa eius blanditiis?
@@ -138,7 +138,7 @@ window.scrollTo(0,0)
 
                     {requests.map((r)=>{
                         return <div className='border-2 p-5 border-stone-400 flex flex-col justify-center items-center'>
-                            <img className='w-10 h-10 rounded-full mb-5' src={`http://localhost:3000${r.image}`} alt="" />
+                            <img className='w-10 h-10 object-cover rounded-full mb-5' src={`http://localhost:3000/${r.image}`} alt="" />
                             <h1>{`${r.username} quiere unirse a ${r.groupName}:`}</h1>
                             <h2 className='italic w-full text-center mb-5'>{`${r.content}`}</h2>
 
@@ -256,7 +256,7 @@ window.scrollTo(0,0)
                 }} className={`${registeredInfo?.username==user?.username?'':'hidden'} mt-5 w-full cursor-pointer text-right font-extrabold text-md tracking-widest text-red-800 p-5`}>AÑADIR NOTICIA +</p>
                 </div>
 
-                <div className={`${g.showingNews?'h-200':'h-0 '}  w-full overflow-hidden transition-all duration-200 `}>
+                <div className={`${g.showingNews?'h-230':'h-0 '}  w-full overflow-hidden transition-all duration-200 `}>
                     <div className='pt-20 px-5 flex flex-col justify-center gap-5 items-center'>
 
                         <h1 className='font-extrabold mb-7 w-full tracking-widest text-xl text-red-800'>Publica una nueva noticia</h1>
@@ -264,41 +264,43 @@ window.scrollTo(0,0)
                         <form className='flex  flex-col w-full justify-center items-center' action='post'  onSubmit={(e)=>{
                             e.preventDefault()
 
-                            console.log(g?.headerName,e.target.section.value,"./static/imgs/dummy.jpg",e.target.title.value,
-                                    e.target.subtitle.value,
-                                     e.target.content.value,
-                                    e.target.caption.value)
+                           const data= new FormData()
+
+                        data.append("file", e.target.photo.files[0])
+                        data.append('info',JSON.stringify({
+                                   header: g?.headerName,
+                                    section: e.target.section.value,
+                                    title: e.target.title.value,
+                                    subtitle: e.target.subtitle.value,
+                                    content: e.target.content.value,
+                                    caption: e.target.caption.value
+                                }))
 
                             let auth=`Bearer ${localStorage.getItem('token')?localStorage.getItem('token'):''}`
                             fetch('http://localhost:3000/publish-news',{
                                 method:'POST',
                                 headers:{
-                                    'Content-Type':'application/json; charset=utf-8',
                                     Authorization:auth
                                 },
-                                body:JSON.stringify({
-                                    header: g?.headerName,
-                                    section: e.target.section.value,
-                                    image: "./static/imgs/dummy.jpg",
-                                    title: e.target.title.value,
-                                    subtitle: e.target.subtitle.value,
-                                    content: e.target.content.value,
-                                    caption: e.target.caption.value
-                                    }  
-                                )       
+                                body:data    
                             }).then((r)=>{
                                
-                                return   r.json()}).then((r)=>{console.log(r)})
+                                return   r.json()}).then((r)=>{
+                                    console.log(r)
+                                    handleNavigation('/')
+                                })
                         }}>
 
                         <label className='w-full min-h-10  text-left text-lg text-stone-800' htmlFor="title">Titular</label>
-                        <input className='w-full min-h-10 mb-5 border-2 border-stone-500 rounded-md text-left text-lg text-stone-800' type="text" name="title" id="title" maxLength={100} minLength={10} />
+                        <input className='w-full min-h-10 mb-5 border-2 border-stone-500 rounded-md text-left text-lg text-stone-800' type="text" name="title" id="title" maxLength={60} minLength={20} />
                         <label className='w-full min-h-10 text-left text-lg text-stone-800' htmlFor="subtitle">Subtítulo</label>
-                        <input className='w-full min-h-10 mb-5 border-2 border-stone-500 rounded-md text-left text-lg text-stone-800' type="text" name="subtitle" id="subtitle" maxLength={200} minLength={50}/>
+                        <input className='w-full min-h-10 mb-5 border-2 border-stone-500 rounded-md text-left text-lg text-stone-800' type="text" name="subtitle" id="subtitle" maxLength={250} minLength={20}/>
+                                <label className='font-bold text-sm sm:text-xl tracking-wide text-stone-500 ' htmlFor="password">Selecciona una foto</label>
+        <input  type="file" name='photo' required id='photo' accept='.jpg, .jpeg, .png'  className='w-full cursor-pointer my-5 h-10 bg-red-800 p-2 rounded-md text-white ' />
                         <label className='w-full min-h-10  text-left text-lg text-stone-800' htmlFor="caption">Caption</label>
-                        <input className='w-full min-h-10 mb-5 border-2 border-stone-500 rounded-md text-left text-lg text-stone-800' type="text" name="caption" id="caption" maxLength={80} minLength={0}/>
+                        <input className='w-full min-h-10 mb-5 border-2 border-stone-500 rounded-md text-left text-lg text-stone-800' type="text" name="caption" id="caption" maxLength={90} minLength={0}/>
                         <label className='w-full min-h-10 text-left text-lg text-stone-800' htmlFor="content">Texto</label>
-                        <textarea className='w-full min-h-10 mb-5 border-2 border-stone-500 rounded-md text-left text-lg text-stone-800' name="content" id="content" maxLength={2500} minLength={500}/>
+                        <textarea  className='w-full min-h-10 max-h-30 mb-5 border-2 border-stone-500 rounded-md text-left text-lg text-stone-800' name="content" id="content" maxLength={3000} minLength={500}/>
                         <select className='w-full min-h-10 mb-5 border-2 border-stone-500 rounded-md text-left text-lg text-stone-800' name="section" id="section">
                             <option value="Carrera" default>Carrera</option>
                             <option value="Amor">Amor</option>
@@ -307,7 +309,7 @@ window.scrollTo(0,0)
                             <option value="Opinión">Opinión</option>
                         </select>
 
-                        <input className='w-full mt-10 min-h-10 text-left text-lg text-stone-800' type="submit" />
+                        <input className='w-1/2 cursor-pointer text-center mt-10 min-h-10 text-lg text-white p-3 bg-red-800 rounded-md font-bold tracking-widest' type="submit" value='Publicar' />
 
                         </form>
 

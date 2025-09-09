@@ -10,7 +10,7 @@ export function LittleNews({title, author, image, height, width}){
             <h4 className='text-[10px] w-full font-extrabold tracking-widest mb-5'>{author.toUpperCase()}</h4>
             <h1 className='text-xs md:text-xl w-full font-semibold'><span><i class="fa-regular fa-newspaper text-red-800"></i></span>&emsp;{title}</h1>
         </div>
-        <img className=' col-span-2 md:col-span-1 h-full object-cover' src={image} alt="" />
+        <img className=' col-span-2 md:col-span-1 h-30 w-full object-cover' src={image} alt="" />
 
 
     </article>

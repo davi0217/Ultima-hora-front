@@ -1,9 +1,15 @@
 import {useState, useEffect, useContext} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, Link} from 'react-router-dom'
 import {NewsContext} from '../App.jsx'
 
 
 export function Login(){
+
+    const [error, setError]=useState('')
+
+    function handleError(text){
+        setError(text)
+    }
 
     useEffect(()=>{
 
@@ -33,8 +39,11 @@ window.scrollTo(0,0)
     <div className='lg:w-2/5 md:w-3/5 w-4/6 bg-stone-100  shadow-lg m-auto mt-10'>
 
     <h1 className='w-full text-center font-extrabold tracking-widest text-md md:text-xl py-5 text-stone-600 border-b-stone-200 border-b-2 '>INICIA SESIÓN</h1>
+    <h1 className={` ${error?'':'opacity-0'} w-full h-10 text-center font-bold tracking-widest text-[11px] md:text-xs py-5 text-red-500   `}>{error}</h1>
 
-    <form className='w-full p-5' action='post' onSubmit={(e)=>{
+    <form className='w-full p-5' onChange={()=>{
+        handleError('')
+    }} action='post' onSubmit={(e)=>{
         e.preventDefault()
         
 
@@ -57,6 +66,8 @@ window.scrollTo(0,0)
                 console.log('im just registered')
                 handleNavigation('/')
             }
+        }).catch((error)=>{
+            handleError('USUARIO O CONTRASEÑA INCORRECTOS')
         })
     }}>
 
@@ -66,6 +77,8 @@ window.scrollTo(0,0)
         <input type="password" name='password' id='password' className='w-full h-10 border-2 border-red-800 mt-4 px-5 ' />
         <div className='w-full text-right  '>
         <input type="submit" value='Acceder' className='w-1/2 h-10 m-auto  transition-all duration-150 bg-red-800 mt-8 text-center text-white hover:bg-white hover:text-red-800 hover:outline-2 cursor-pointer  hover:outline-red-500 rounded-lg ' />
+     <p className='p-2 text-md mt-4 font-thin text-stone-500'>¿Todavía no tienes un usuario? Regístrate <Link to='/register'><span className='underline underline-offset-2 font-extrabold text-stone-600 cursor-pointer'>aquí</span></Link></p>
+
         </div>
     </form>
     

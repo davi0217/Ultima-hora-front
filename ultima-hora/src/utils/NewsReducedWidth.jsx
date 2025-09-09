@@ -1,5 +1,5 @@
 import {useState, useEffect, useRef, useContext} from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import dummy from "../assets/news_img/dummy.jpg"
 import { ColumnCTA } from './ColumnCTA.jsx'
@@ -29,21 +29,71 @@ export function NewsReducedWidth(){
 
 
     const {useNewsReducedWidth}=useContext(NewsContext)
-    const {news}=useNewsReducedWidth()
+    const {news, mostLiked}=useNewsReducedWidth()
+    const params=useParams()
 
-    console.log(news)
+   function giveLink(news_id){
+
+    if(news_id==0 ){
+            if(params.header){
+                return `/header/${params.header}`
+            }else{
+                return '/'
+            }
+
+    }else{
+
+        if(params.header){
+            return `/news/${params.header}/${news_id}`
+        }else{
+            return `/news/${news_id}`
+        }
+
+    }
+
+
+   }
         
-        
+       console.log(news) 
         return  <>
 
-        <section className='w-full bg-stone-100 p-10  flex flex-col '>
+        {params.section=='Opinión' && news?.allColumns && <section className='w-full bg-stone-100 p-10  flex flex-col '>
+            
+            <Link to={giveLink(news.allColumns[0].news_id)}> 
+            <Cover title={news.allColumns[0].title}
+            subtitle={news.allColumns[0].subtitle}
+            author={news.allColumns[0].username}
+            caption={news.allColumns[0].caption}
+            image={`http://localhost:3000/${news.allColumns[0].image}`}
+            height={'auto'}
+            width={'100%'} >
 
-            <Link to={`${news?.cover[0]?.news_id==0?'/':`/news/${news?.cover[0]?.news_id}`}`}> 
+            </Cover>
+            </Link> 
+
+            {news?.allColumns && news.allColumns.map((n)=>{
+
+                return <Link to={giveLink(n.news_id)}> 
+                <MiddleNews title={n.title}
+            author={n.username}
+            image={`http://localhost:3000/${n.image}`}
+            height={'auto'}
+            width={'100%'}>
+            </MiddleNews>
+            </Link>
+            })}
+
+            
+            </section>}
+
+        {params.section!='Opinión' && <section className='w-full bg-stone-100 p-10  flex flex-col '>
+
+            <Link to={giveLink(news?.cover[0]?.news_id)}> 
             <Cover title={news?.cover[0]?.title}
             subtitle={news?.cover[0]?.subtitle}
             author={news?.cover[0]?.username}
             caption={news?.cover[0]?.caption}
-            image={`http://localhost:3000${news?.cover[0]?.image}`}
+            image={`http://localhost:3000/${news?.cover[0]?.image}`}
             height={'auto'}
             width={'100%'} >
 
@@ -52,10 +102,10 @@ export function NewsReducedWidth(){
 
             {news?.firstMiddle && news?.firstMiddle?.map((n)=>{
 
-                return <Link to={`${n.news_id==0?'/':`/news/${n.news_id}`}`}> 
+                return <Link to={giveLink(n.news_id)}> 
                 <MiddleNews title={n.title}
             author={n.username}
-            image={`http://localhost:3000${n.image}`}
+            image={`http://localhost:3000/${n.image}`}
             height={'auto'}
             width={'100%'}>
             </MiddleNews>
@@ -68,8 +118,8 @@ export function NewsReducedWidth(){
             <article className='flex flex-col gap-10'>
                  {news?.columns && news?.columns?.map((n)=>{
 
-                return  <Link to={`${n.news_id==0?'/':`/news/${n.news_id}`}`}>
-                <ColumnCTA image={`http://localhost:3000${n.image}`} section="Opinión" author={n.username}
+                return  <Link to={giveLink(n.news_id)}>
+                <ColumnCTA image={`http://localhost:3000/${n.image}`} section="Opinión" author={n.username}
                 title={n.title}
                 content={n.content.slice(0,200)}
                heightPassed={`100%`}
@@ -83,10 +133,10 @@ export function NewsReducedWidth(){
 
                 {news?.body && news?.body?.map((n)=>{
 
-                return <Link to={`${n.news_id==0?'/':`/news/${n.news_id}`}`}>
+                return <Link to={giveLink(n.news_id)}>
                 <LittleNews title={n.title}
             author={n.username}
-            image={`http://localhost:3000${n.image}`}
+            image={`http://localhost:3000/${n.image}`}
             height={'auto'}
             width={'100%'}>
             </LittleNews>
@@ -96,13 +146,13 @@ export function NewsReducedWidth(){
 
             <div className='w-full border-y-8 border-double border-stone-200 py-5 text-center font-extrabold text-4xl tracking widest my-10'>LO MÁS LEÍDO</div>
 
-            {news?.secondMiddle && news?.secondMiddle?.map((n, index)=>{
+            {mostLiked && mostLiked?.map((n, index)=>{
 
-                return <Link to={`${n.news_id==0?'/':`/news/${n.news_id}`}`}>
+                return <Link to={giveLink(news?.cover[0]?.news_id)}>
                 <div className='w-1/2 m-auto border-b-8 border-double border-red-800 py-5 text-center font-extrabold text-4xl tracking widest'>{index+1}</div>
             <MiddleNews title={n.title}
             author={n.username}
-            image={`http://localhost:3000${n.image}`}
+            image={`http://localhost:3000/${n.image}`}
             height={'auto'}
             width={'100%'}>
             </MiddleNews>
@@ -111,17 +161,17 @@ export function NewsReducedWidth(){
             
 
 
-            <div className='w-full mt-5 h-280  bg-[url(./assets/logos/red-marble.jpg)] bg-stone-500 bg-blend-multiply bg-center bg-size-[1000px] relative flex flex-col items-center justify-start gap-5 pt-10 '>
-            <p className='text-[170px] font-[Monoton] text-red-700 sticky top-0 pb-25'>G</p>
+            <div className='w-full mt-5 h-300  bg-[url(./assets/logos/red-marble.jpg)] bg-stone-500 bg-blend-multiply bg-center bg-size-[1000px] relative flex flex-col items-center justify-start gap-5 pt-20 '>
+            <p className='text-[170px] font-[Monoton] text-red-700 sticky top-10 pb-25'>G</p>
                     <p className='text-4xl font-[Monoton] text-stone-200 -mt-30'>A</p>
-                    <p className='text-9xl font-[Monoton] text-red-700 sticky top-55'>Z</p>
+                    <p className='text-9xl font-[Monoton] text-red-700 sticky top-65'>Z</p>
                     <p className='text-5xl font-[Monoton] text-stone-200'>E</p>
                     <p className='text-5xl font-[Monoton] text-stone-200'>T</p>
                     <p className='text-5xl font-[Monoton] text-stone-200'>A</p>
             </div>
              
 
-        </section>
+        </section>}
 
 
 
